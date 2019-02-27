@@ -1,0 +1,20 @@
+FROM ubuntu:18.04
+
+RUN apt-get update && \
+    apt install -y netcat net-tools && \
+    apt-get install -y openjdk-8-jdk && \
+    apt-get clean -qq && \
+    apt-get autoremove -y && \
+    rm -rf /var/lib/apt/lists/*
+
+
+
+ENV NB_UID=1000 \
+    NB_GID=1000 \
+    NB_USER=task \
+    HOME=/home/task
+RUN useradd -m -s /bin/bash -N -u $NB_UID $NB_USER && \
+    mkdir -p $HOME && \
+    chown -R $NB_USER:$NB_GID /home/$NB_USER && \
+    chmod g+w /etc/passwd /etc/group
+USER $NB_UID
